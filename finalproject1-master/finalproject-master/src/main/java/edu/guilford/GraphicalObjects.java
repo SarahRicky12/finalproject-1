@@ -6,8 +6,11 @@ public abstract class GraphicalObjects {
     
     protected int xPosition;
     protected int yPosition;
-    protected ImageView image; 
-    
+
+    //abstract method for transitioning the object
+    public abstract void transition(ImageView image);
+
+
     
 
 
