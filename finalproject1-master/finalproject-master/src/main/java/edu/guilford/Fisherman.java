@@ -2,6 +2,7 @@ package edu.guilford;
 
 import java.io.File;
 
+import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.ImageView;
 
@@ -55,7 +56,7 @@ public class Fisherman extends GraphicalObjects {
         transition = new TranslateTransition();
         transition.setNode(image);
         transition.setDuration(javafx.util.Duration.seconds(1));
-        transition.setCycleCount(1);
+        transition.setCycleCount(Animation.INDEFINITE);
         transition.setAutoReverse(false);
         transition.play();
     }
