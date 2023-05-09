@@ -2,9 +2,13 @@ package edu.guilford;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
+import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
 public class FishingLine extends GraphicalObjects {
@@ -12,6 +16,9 @@ public class FishingLine extends GraphicalObjects {
     int endingY;
     Line line;
     Timeline lineTransition; 
+    Timeline circleTransition;
+    Circle circle;
+    Path path = new Path();
 
     // constructor
     public FishingLine() {
@@ -24,6 +31,7 @@ public class FishingLine extends GraphicalObjects {
         //set line color
         line.setStrokeWidth(2);
         line.setStroke(javafx.scene.paint.Color.BLACK);
+        
     }
 
     // getters and setters
@@ -51,6 +59,10 @@ public class FishingLine extends GraphicalObjects {
         this.line = line;
     }
 
+    public Circle getCircle() {
+        return circle;
+    }
+
 
     // transition method inherited from GraphicalObjects
     @Override
@@ -66,14 +78,50 @@ public class FishingLine extends GraphicalObjects {
                         new KeyValue(line.endYProperty(), 183)));
         lineTransition.setCycleCount(1);
         lineTransition.play();
+
+        //use path transition to have the circle follow the end of the line
+        
+        circle = new Circle(line.getEndX(), line.getEndY(), 5);
+        circle.setVisible(true);
+        PathTransition pathTransition = new PathTransition();
+        path.getElements().add(new MoveTo(339, 183));
+        //parameters for moveTo are (x, y)
+        pathTransition.setDuration(Duration.seconds(7));
+        pathTransition.setNode(line);
+        pathTransition.setPath(path);
+        pathTransition.setCycleCount(1);
+        pathTransition.play();
+
+
+        //  //add a circle to the end of the line with parameters(circle center x, circle center y, radius)
+        //  Circle circle = new Circle(line.getEndX(), line.getEndY(), 5);
+        //  //create a timeline for the circle
+        //  circleTransition = new Timeline();
+        //  circleTransition.getKeyFrames()
+        //          .add(new KeyFrame(Duration.seconds(7),
+        //                  new KeyValue(circle.centerXProperty(), 339),
+        //                  new KeyValue(circle.centerYProperty(), 183)));
+ 
+        //  circleTransition.setCycleCount(1);
+        //  circleTransition.play();
     }
 
+//moving line back and forth to catch fish with it being attached to the boat means having the line starting point connected to the pixel of the fishing rod, end point being with the slope of the line 
+
     public void transitionLineDownward() {
+        //add a circle to the end of the line
+        Circle circle = new Circle(317, 827, 5);
         lineTransition = new Timeline();
         lineTransition.getKeyFrames()
                 .add(new KeyFrame(Duration.seconds(7),
                         new KeyValue(line.endXProperty(), 317),
                         new KeyValue(line.endYProperty(), 827)));
+
+        //have the circle follow the line
+        lineTransition.getKeyFrames()
+                .add(new KeyFrame(Duration.seconds(7),
+                        new KeyValue(circle.centerXProperty(), 339),
+                        new KeyValue(circle.centerYProperty(), 183)));
         lineTransition.setCycleCount(1);
         lineTransition.play();
     }
